@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import ttk
 from tkinter import messagebox
+import sqlite3
 
 def enter_data():
     accepted = accept_var.get()
@@ -25,6 +26,26 @@ def enter_data():
             print("Has completed", numcourses, "courses", "which lasted", numsemesters, "semesters.")
             print("Registration status:", registration_status)
             print("-------------------------------------------------")
+
+            # Create Table
+            conn = sqlite3.connect('data.db')
+            table_create_query = '''CREATE TABLE IF NOT EXISTS Student_Data
+                    (firstname TEXT, lastname TEXT, title TEXT, age INT, nationality TEXT,
+                    registration_status TEXT, num_courses INT, num_semesters INT)
+            '''
+            conn.execute(table_create_query)
+
+            # Insert Data
+            data_insert_query = '''INSERT INTO Student_Data (firstname, lastname, title,
+            age, nationality, registration_status, num_courses, num_semesters) VALUES 
+            (?, ?, ?, ?, ?, ?, ?, ?)'''
+            data_insert_tuple = (firstname, lastname, title,
+                                age, nationality, registration_status, numcourses, numsemesters)
+            cursor = conn.cursor()
+            cursor.execute(data_insert_query, data_insert_tuple)
+            conn.commit()
+            conn.close()
+
         else:
             tkinter.messagebox.showwarning(title="Error!", message="Both Names are required")
     else:
