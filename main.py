@@ -3,10 +3,11 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 
+
 def enter_data():
     accepted = accept_var.get()
 
-    if accepted =="Accepted":
+    if accepted == "Accepted":
         # User info
         firstname = first_name_entry.get()
         lastname = last_name_entry.get()
@@ -39,17 +40,20 @@ def enter_data():
             data_insert_query = '''INSERT INTO Student_Data (firstname, lastname, title,
             age, nationality, registration_status, num_courses, num_semesters) VALUES 
             (?, ?, ?, ?, ?, ?, ?, ?)'''
-            data_insert_tuple = (firstname, lastname, title,
-                                age, nationality, registration_status, numcourses, numsemesters)
+            data_insert_tuple = (firstname, lastname, title, age, nationality, registration_status, numcourses,
+                                 numsemesters)
             cursor = conn.cursor()
             cursor.execute(data_insert_query, data_insert_tuple)
             conn.commit()
             conn.close()
-
+            firstname = ""
+            lastname = ""
+            title = ""
         else:
             tkinter.messagebox.showwarning(title="Error!", message="Both Names are required")
     else:
         tkinter.messagebox.showwarning(title="Error!", message="You have not accepted the terms!")
+
 
 window = tkinter.Tk()
 window.title("Data Entry Form")
@@ -82,7 +86,8 @@ age_label.grid(row=2, column=0)
 age_spinbox.grid(row=3, column=0)
 
 nationality_label = tkinter.Label(user_info_frame, text="Nationality")
-nationality_combobox = ttk.Combobox(user_info_frame, values=["African", "American", "German", "Indian", "Venezulian", "Mexican", "Chinese",])
+nationality_combobox = ttk.Combobox(user_info_frame, values=["African", "American", "German", "Indian", "Venezulian",
+                                                             "Mexican", "Chinese"])
 nationality_label.grid(row=2, column=1)
 nationality_combobox.grid(row=3, column=1)
 
@@ -124,7 +129,7 @@ terms_check = tkinter.Checkbutton(terms_frame, text="I accept the terms and cond
 terms_check.grid(row=0, column=0)
 
 # Button
-button = tkinter.Button(frame, text="Enter data", command= enter_data)
+button = tkinter.Button(frame, text="Enter data", command=enter_data)
 button.grid(row=3, column=0, sticky="news", padx=20, pady=10)
 
 window.mainloop()
